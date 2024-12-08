@@ -264,9 +264,21 @@
     }
 
     // Add click event handler.
-    wrapper.addEventListener('click', function() {
-      switchScene(findSceneById(hotspot.target));
-    });
+   wrapper.addEventListener('click', function() {
+  // Add zoom-in effect
+  const zoomIn = { fov: 30, pitch: view.pitch(), yaw: view.yaw() }; // Adjust FOV for zoom effect
+  view.setParameters(zoomIn);
+
+  // Delay the scene switch until after the zoom effect
+  setTimeout(() => {
+    switchScene(findSceneById(hotspot.target));
+    
+    // Optionally reset the zoom after switching scenes
+    const zoomOut = { fov: 90, pitch: view.pitch(), yaw: view.yaw() }; // Reset to default FOV
+    setTimeout(() => view.setParameters(zoomOut), 500);
+  }, 500); // Adjust timing for the zoom effect
+});
+
 
     // Prevent touch and scroll events from reaching the parent element.
     // This prevents the view control logic from interfering with the hotspot.
